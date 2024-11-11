@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechyStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">TechyStore</h1>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#">Home</a>
+            <a href="#">Laptops</a>
+            <a href="#">Smartphones</a>
+            <a href="#">Accessories</a>
+            <a href="#">Deals</a>
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <section class="banner">
+        <div class="container">
+            <h2>Exclusive Tech Deals</h2>
+            <p>Get the latest gadgets at unbeatable prices!</p>
+            <button class="shop-now">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div id="product-list" class="product-list">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Created By TechyStore Team | &copy; 2024</p>
+        </div>
+    </footer>
+
+    <script>
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = ''; 
+
+                products.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'product';
+                    productDiv.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p>Category: ${product.category}</p>
+                        <p>Year: ${product.year}</p>
+                        <p>Price: $${product.price} <span class="original-price">$${product.originalPrice}</span></p>
+                        <button class="add-to-cart">Add To Cart</button>
+                    `;
+                    productList.appendChild(productDiv);
+                });
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                document.getElementById('product-list').innerHTML = '<p>Error loading products</p>';
+            }
+        }
+
+        window.onload = fetchProducts;
+    </script>
+</body>
+</html>
